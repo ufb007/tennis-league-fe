@@ -13,7 +13,7 @@ export default function Login() {
 
     useEffect(() => {
         if (state?.success) {
-            router.push("/league");
+            router.push("/leagues");
         }
     }, [state?.success]);
 

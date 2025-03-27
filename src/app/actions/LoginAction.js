@@ -21,6 +21,6 @@ export async function LoginAction(_, formData) {
     }
 
     return response.token 
-        ? { success: "Logged in successfully!", token: response.token }
+        ? { success: "Logged in successfully!", token: response.token, user: response.user }
         : { error: response.error };
 }

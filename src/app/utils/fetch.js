@@ -4,13 +4,27 @@ import { cookies } from "next/headers";
 
 const BASE_URL = "http://localhost:8080";
 
-export async function apiFetch(endpoint, options = {}) {
+const getHeaders = async () => {
     const cookieStore = await cookies();
 
-    const defaultHeaders = {
+    return {
         "Content-Type": "application/json",
         "Authorization": cookieStore.get("token")?.value
     };
+}
+
+export async function apiGet(endpoint) {
+    const defaultHeaders = await getHeaders();
+
+    return fetch(endpoint, {
+        headers: {
+            ...defaultHeaders,
+        },
+    });
+}
+
+export async function apiFetch(endpoint, options = {}) {
+    const defaultHeaders = await getHeaders();
 
     if (options.body) {
         const dataObject = Object.fromEntries(options.body.entries());
@@ -29,5 +43,7 @@ export async function apiFetch(endpoint, options = {}) {
         },
     };
 
-    return (await fetch(`${BASE_URL}${endpoint}`, config)).json();
+    const response = await fetch(`${BASE_URL}${endpoint}`, config);
+
+    return response.json();
 }

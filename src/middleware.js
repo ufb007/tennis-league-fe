@@ -1,21 +1,25 @@
+"use server";
+
 import { NextResponse } from "next/server";
 import { apiFetch } from "./app/utils/fetch";
+import { cookies } from "next/headers";
 
-export function middleware(req) {
-    const token = req.cookies.get("token")?.value;
-    const { pathname } = req.nextUrl;
+export async function middleware(req) {
+    const cookieStore = await cookies();
+    const { url, nextUrl: { pathname } } = req;
 
-    if (token) {
-        const response = apiFetch("/api/auth/check")
+    const response = await apiFetch("/api/auth/check")
 
-        if (!response.error) {
-            if (pathname === "/login") {
-                return NextResponse.redirect(new URL("/league", req.url))
-            }
-        }
+    if (response.token) {
+        cookieStore.set("token", response.token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "strict",
+            path: "/",
+        });
     } else {
         if (pathname !== "/login") {
-            return NextResponse.redirect(new URL("/login", req.url));
+            return NextResponse.redirect(new URL("/login", url));
         }
     }
 
@@ -25,6 +29,6 @@ export function middleware(req) {
 export const config = {
     matcher: [
         "/login",
-        "/league"
+        "/leagues"
     ],
 };

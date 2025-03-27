@@ -1,10 +1,11 @@
 "use server";
 
 import { cookies } from "next/headers";
+import { config } from "./config";
 
-const BASE_URL = "http://localhost:8080";
+const BASE_URL = config.API_URL;
 
-const getHeaders = async () => {
+export const getHeaders = async () => {
     const cookieStore = await cookies();
 
     return {
@@ -13,20 +14,12 @@ const getHeaders = async () => {
     };
 }
 
-export async function apiGet(endpoint) {
-    const defaultHeaders = await getHeaders();
-
-    return fetch(endpoint, {
-        headers: {
-            ...defaultHeaders,
-        },
-    });
-}
-
 export async function apiFetch(endpoint, options = {}) {
     const defaultHeaders = await getHeaders();
 
     if (options.body) {
+        console.log('BODY - ', options.body)
+
         const dataObject = Object.fromEntries(options.body.entries());
 
         options = {

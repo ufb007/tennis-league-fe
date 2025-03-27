@@ -24,6 +24,11 @@ export default function Leagues() {
     return (
         <div>
             <h1>Leagues</h1>
+            <Form action={createLeague} className="flex gap-2 flex-col">
+                <Input type="text" name="name" />
+                <Button>Create League</Button>
+                {state.error || state.success}
+            </Form>
             {leagues?.length > 0 ? (
                 leagues.map(league => (
                     <div key={league.id}>
@@ -31,14 +36,7 @@ export default function Leagues() {
                         <p>{league.active}</p>
                     </div>
                 ))
-            ) : (<>
-                    <p>No leagues found</p>
-                    <Form action={createLeague} className="flex gap-2 flex-col">
-                        <Input type="text" name="name" />
-                        <Button>Create League</Button>
-                    </Form>
-                </>
-            )}
+            ) : (<p>No leagues found</p>)}
         </div>
     );
 }

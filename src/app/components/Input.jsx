@@ -7,6 +7,7 @@ export default function Input({ type, name, className }) {
                 text-black 
                 p-2 
                 rounded-lg 
+                border-[1px]
                 ${className}`} />
     );
 }

@@ -18,8 +18,6 @@ export async function apiFetch(endpoint, options = {}) {
     const defaultHeaders = await getHeaders();
 
     if (options.body) {
-        console.log('BODY - ', options.body)
-
         const dataObject = Object.fromEntries(options.body.entries());
 
         options = {
